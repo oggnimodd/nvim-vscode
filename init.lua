@@ -1,157 +1,157 @@
 -- ~/.config/nvim/vscode-init.lua
 -- This is a dedicated config for the vscode-neovim extension.
 
--- =================================================================
--- 1. PLUGIN MANAGER SETUP (mini.deps)
--- =================================================================
--- Bootstrap mini.deps - this will only run once
-local minideps_path = vim.fn.stdpath("data") .. "/mini/deps"
-if not vim.loop.fs_stat(minideps_path) then
-	vim.cmd("!git clone https://github.com/echasnovski/mini.deps " .. minideps_path)
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
 end
-vim.opt.rtp:prepend(minideps_path)
-require("mini.deps").setup()
+vim.opt.rtp:prepend(lazypath)
 
--- =================================================================
--- 2. PLUGIN DEFINITIONS & INSTALLATION
--- =================================================================
-local add, now = require("mini.deps").add, require("mini.deps").now
-
--- Add Treesitter and its textobjects plugin
-add("nvim-treesitter/nvim-treesitter", { build = ":TSUpdate" })
-add("nvim-treesitter/nvim-treesitter-textobjects")
-
--- Install plugins now (BEFORE configuration)
-now()
-
--- =================================================================
--- 3. PLUGIN CONFIGURATIONS
--- =================================================================
-
--- Configure Treesitter using your advanced setup
-require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"bash",
-		"c",
-		"diff",
-		"html",
-		"lua",
-		"luadoc",
-		"markdown",
-		"markdown_inline",
-		"query",
-		"vim",
-		"vimdoc",
-		"typescript",
-		"javascript",
-		"css",
-		"json",
-		"tsx",
-		"svelte",
-		"rust",
-		"go",
-		"gomod",
-		"gowork",
-		"gosum",
-	},
-	auto_install = true,
-
-	-- CRITICAL: Disable Treesitter's highlighting to prevent conflicts with VS Code.
-	highlight = {
-		enable = false,
-	},
-	-- CRITICAL: Disable Treesitter's indenting to let VS Code handle it.
-	indent = {
-		enable = false,
-	},
-
-	-- This is the powerful part we want from Neovim
-	textobjects = {
-		select = {
-			enable = true,
-			lookahead = true,
-			keymaps = {
-				["a="] = { query = "@assignment.outer", desc = "Select outer part of an assignment" },
-				["i="] = { query = "@assignment.inner", desc = "Select inner part of an assignment" },
-				["l="] = { query = "@assignment.lhs", desc = "Select left hand side of an assignment" },
-				["r="] = { query = "@assignment.rhs", desc = "Select right hand side of an assignment" },
-				["aa"] = { query = "@parameter.outer", desc = "Select outer part of a parameter/argument" },
-				["ia"] = { query = "@parameter.inner", desc = "Select inner part of a parameter/argument" },
-				["ai"] = { query = "@conditional.outer", desc = "Select outer part of a conditional" },
-				["ii"] = { query = "@conditional.inner", desc = "Select inner part of a conditional" },
-				["al"] = { query = "@loop.outer", desc = "Select outer part of a loop" },
-				["il"] = { query = "@loop.inner", desc = "Select inner part of a loop" },
-				["af"] = { query = "@call.outer", desc = "Select outer part of a function call" },
-				["if"] = { query = "@call.inner", desc = "Select inner part of a function call" },
-				["am"] = { query = "@function.outer", desc = "Select outer part of a method/function definition" },
-				["im"] = { query = "@function.inner", desc = "Select inner part of a method/function definition" },
-				["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
-				["ic"] = { query = "@class.inner", desc = "Select inner part of a class" },
+-- Setup lazy.nvim with our plugins
+require("lazy").setup({
+	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+		-- Use `main` and `opts` for a more robust setup with lazy.nvim
+		main = "nvim-treesitter.configs",
+		opts = {
+			ensure_installed = {
+				"bash",
+				"c",
+				"diff",
+				"html",
+				"lua",
+				"luadoc",
+				"markdown",
+				"markdown_inline",
+				"query",
+				"vim",
+				"vimdoc",
+				"typescript",
+				"javascript",
+				"css",
+				"json",
+				"tsx",
+				"svelte",
+				"rust",
+				"go",
+				"gomod",
+				"gowork",
+				"gosum",
+			},
+			auto_install = true,
+			highlight = {
+				enable = false, -- Let VS Code handle highlighting
+			},
+			indent = {
+				enable = false, -- Let VS Code handle indentation
+			},
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true,
+					keymaps = {
+						["a="] = { query = "@assignment.outer", desc = "Select outer part of an assignment" },
+						["i="] = { query = "@assignment.inner", desc = "Select inner part of an assignment" },
+						["l="] = { query = "@assignment.lhs", desc = "Select left hand side of an assignment" },
+						["r="] = { query = "@assignment.rhs", desc = "Select right hand side of an assignment" },
+						["aa"] = { query = "@parameter.outer", desc = "Select outer part of a parameter/argument" },
+						["ia"] = { query = "@parameter.inner", desc = "Select inner part of a parameter/argument" },
+						["ai"] = { query = "@conditional.outer", desc = "Select outer part of a conditional" },
+						["ii"] = { query = "@conditional.inner", desc = "Select inner part of a conditional" },
+						["al"] = { query = "@loop.outer", desc = "Select outer part of a loop" },
+						["il"] = { query = "@loop.inner", desc = "Select inner part of a loop" },
+						["af"] = { query = "@call.outer", desc = "Select outer part of a function call" },
+						["if"] = { query = "@call.inner", desc = "Select inner part of a function call" },
+						["am"] = {
+							query = "@function.outer",
+							desc = "Select outer part of a method/function definition",
+						},
+						["im"] = {
+							query = "@function.inner",
+							desc = "Select inner part of a method/function definition",
+						},
+						["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
+						["ic"] = { query = "@class.inner", desc = "Select inner part of a class" },
+					},
+				},
+				swap = {
+					enable = true,
+					swap_next = {
+						["<leader>na"] = "@parameter.inner",
+						["<leader>n:"] = "@property.outer",
+						["<leader>nm"] = "@function.outer",
+					},
+					swap_previous = {
+						["<leader>pa"] = "@parameter.inner",
+						["<leader>p:"] = "@property.outer",
+						["<leader>pm"] = "@function.outer",
+					},
+				},
+				move = {
+					enable = true,
+					set_jumps = true,
+					goto_next_start = {
+						["]f"] = { query = "@call.outer", desc = "Next function call start" },
+						["]m"] = { query = "@function.outer", desc = "Next method/function def start" },
+						["]c"] = { query = "@class.outer", desc = "Next class start" },
+						["]i"] = { query = "@conditional.outer", desc = "Next conditional start" },
+						["]l"] = { query = "@loop.outer", desc = "Next loop start" },
+					},
+					goto_next_end = {
+						["]F"] = { query = "@call.outer", desc = "Next function call end" },
+						["]M"] = { query = "@function.outer", desc = "Next method/function def end" },
+						["]C"] = { query = "@class.outer", desc = "Next class end" },
+						["]I"] = { query = "@conditional.outer", desc = "Next conditional end" },
+						["]L"] = { query = "@loop.outer", desc = "Next loop end" },
+					},
+					goto_previous_start = {
+						["[f"] = { query = "@call.outer", desc = "Prev function call start" },
+						["[m"] = { query = "@function.outer", desc = "Prev method/function def start" },
+						["[c"] = { query = "@class.outer", desc = "Prev class start" },
+						["[i"] = { query = "@conditional.outer", desc = "Prev conditional start" },
+						["[l"] = { query = "@loop.outer", desc = "Prev loop start" },
+					},
+					goto_previous_end = {
+						["[F"] = { query = "@call.outer", desc = "Prev function call end" },
+						["[M"] = { query = "@function.outer", desc = "Prev method/function def end" },
+						["[C"] = { query = "@class.outer", desc = "Prev class end" },
+						["[I"] = { query = "@conditional.outer", desc = "Prev conditional end" },
+						["[L"] = { query = "@loop.outer", desc = "Prev loop end" },
+					},
+				},
+			},
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "gnn",
+					node_incremental = "gnp",
+					scope_incremental = "gns",
+					node_decremental = "gnm",
+				},
 			},
 		},
-		swap = {
-			enable = true,
-			swap_next = {
-				["<leader>na"] = "@parameter.inner",
-				["<leader>n:"] = "@property.outer",
-				["<leader>nm"] = "@function.outer",
-			},
-			swap_previous = {
-				["<leader>pa"] = "@parameter.inner",
-				["<leader>p:"] = "@property.outer",
-				["<leader>pm"] = "@function.outer",
-			},
-		},
-		move = {
-			enable = true,
-			set_jumps = true,
-			goto_next_start = {
-				["]f"] = { query = "@call.outer", desc = "Next function call start" },
-				["]m"] = { query = "@function.outer", desc = "Next method/function def start" },
-				["]c"] = { query = "@class.outer", desc = "Next class start" },
-				["]i"] = { query = "@conditional.outer", desc = "Next conditional start" },
-				["]l"] = { query = "@loop.outer", desc = "Next loop start" },
-				["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-				["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-			},
-			goto_next_end = {
-				["]F"] = { query = "@call.outer", desc = "Next function call end" },
-				["]M"] = { query = "@function.outer", desc = "Next method/function def end" },
-				["]C"] = { query = "@class.outer", desc = "Next class end" },
-				["]I"] = { query = "@conditional.outer", desc = "Next conditional end" },
-				["]L"] = { query = "@loop.outer", desc = "Next loop end" },
-			},
-			goto_previous_start = {
-				["[f"] = { query = "@call.outer", desc = "Prev function call start" },
-				["[m"] = { query = "@function.outer", desc = "Prev method/function def start" },
-				["[c"] = { query = "@class.outer", desc = "Prev class start" },
-				["[i"] = { query = "@conditional.outer", desc = "Prev conditional start" },
-				["[l"] = { query = "@loop.outer", desc = "Prev loop start" },
-			},
-			goto_previous_end = {
-				["[F"] = { query = "@call.outer", desc = "Prev function call end" },
-				["[M"] = { query = "@function.outer", desc = "Prev method/function def end" },
-				["[C"] = { query = "@class.outer", desc = "Prev class end" },
-				["[I"] = { query = "@conditional.outer", desc = "Prev conditional end" },
-				["[L"] = { query = "@loop.outer", desc = "Prev loop end" },
-			},
-		},
-	},
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			init_selection = "gnn",
-			node_incremental = "gnp",
-			scope_incremental = "gns",
-			node_decremental = "gnm",
-		},
+		-- This config function will run AFTER the plugin has been setup with the `opts` table.
+		config = function(_, opts)
+			-- We need to call setup again here to apply the opts.
+			require("nvim-treesitter.configs").setup(opts)
+
+			-- Keymaps for repeatable textobject motions
+			local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+			vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
+			vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
+		end,
 	},
 })
-
--- Setup repeatable moves AFTER the main setup
-local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
-vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
-vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
 
 -- The most important line: allows Neovim to talk to VS Code.
 local vscode = require("vscode")
