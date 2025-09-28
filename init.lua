@@ -151,6 +151,33 @@ require("lazy").setup({
 			vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
 		end,
 	},
+
+	-- mini.surround for yanking, deleting, and replacing surroundings
+	{
+		"echasnovski/mini.nvim",
+		config = function()
+			-- Just setup the module, no custom mappings needed here
+			require("mini.surround").setup()
+
+			-- The most important line: allows Neovim to talk to VS Code.
+			local vscode = require("vscode")
+
+			-- This robust wrapper function handles all surround operations correctly.
+			-- It tells VS Code to let Neovim handle the next sequence of keys.
+			local function surround_op(op)
+				return function()
+					vscode.with_insert(function()
+						vim.api.nvim_feedkeys(op, "n", true)
+					end)
+				end
+			end
+
+			-- Map the wrapper functions to the keys you use
+			vim.keymap.set("n", "ys", surround_op("ys"), { desc = "VSCode-aware Surround Add" })
+			vim.keymap.set("n", "ds", surround_op("ds"), { desc = "VSCode-aware Surround Delete" })
+			vim.keymap.set("n", "cs", surround_op("cs"), { desc = "VSCode-aware Surround Change" })
+		end,
+	},
 })
 
 -- The most important line: allows Neovim to talk to VS Code.
