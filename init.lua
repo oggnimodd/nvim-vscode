@@ -178,6 +178,20 @@ require("lazy").setup({
 			vim.keymap.set("n", "cs", surround_op("cs"), { desc = "VSCode-aware Surround Change" })
 		end,
 	},
+
+	{
+		"folke/flash.nvim",
+		event = "VeryLazy",
+		---@type Flash.Config
+		opts = {},
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+			{ "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+    },
+	},
 })
 
 -- The most important line: allows Neovim to talk to VS Code.
@@ -300,3 +314,9 @@ map("v", "<C-v>", "p", { desc = "Paste over Selection from System Clipboard" })
 -- Cut mappings.
 map("n", "<C-x>", "dd", { desc = "Cut Line to System Clipboard" })
 map("v", "<C-x>", "d", { desc = "Cut Selection to System Clipboard" })
+
+-- Use gj and gk for visual line navigation
+vim.keymap.set("n", "j", "gj", { noremap = true, silent = true })
+vim.keymap.set("n", "k", "gk", { noremap = true, silent = true })
+vim.keymap.set("v", "j", "gj", { noremap = true, silent = true })
+vim.keymap.set("v", "k", "gk", { noremap = true, silent = true })
