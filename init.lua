@@ -314,9 +314,3 @@ map("v", "<C-v>", "p", { desc = "Paste over Selection from System Clipboard" })
 -- Cut mappings.
 map("n", "<C-x>", "dd", { desc = "Cut Line to System Clipboard" })
 map("v", "<C-x>", "d", { desc = "Cut Selection to System Clipboard" })
-
--- Use gj and gk for visual line navigation
-vim.keymap.set("n", "j", "gj", { noremap = true, silent = true })
-vim.keymap.set("n", "k", "gk", { noremap = true, silent = true })
-vim.keymap.set("v", "j", "gj", { noremap = true, silent = true })
-vim.keymap.set("v", "k", "gk", { noremap = true, silent = true })
