@@ -308,8 +308,3 @@ map("v", "<C-v>", "p", { desc = "Paste over Selection from System Clipboard" })
 -- Cut mappings.
 map("n", "<C-x>", "dd", { desc = "Cut Line to System Clipboard" })
 map("v", "<C-x>", "d", { desc = "Cut Selection to System Clipboard" })
-
--- Map <leader>q to close the current VS Code tab/editor
-vim.keymap.set("n", "<leader>q", function()
-	require("vscode").action("workbench.action.closeActiveEditor")
-end, { noremap = true, silent = true, desc = "VSCode: Close current tab" })
