@@ -308,3 +308,17 @@ map("v", "<C-v>", "p", { desc = "Paste over Selection from System Clipboard" })
 -- Cut mappings.
 map("n", "<C-x>", "dd", { desc = "Cut Line to System Clipboard" })
 map("v", "<C-x>", "d", { desc = "Cut Selection to System Clipboard" })
+
+-- =================================================================
+-- Custom Commands and Mappings
+-- =================================================================
+require("custom.comments-remover")
+
+-- Move focus between editor groups (panes)
+map("n", "<C-h>", function()
+	vscode.action("workbench.action.focusLeftGroup")
+end, { noremap = true, silent = true, desc = "VSCode: Focus left editor group" })
+
+map("n", "<C-l>", function()
+	vscode.action("workbench.action.focusRightGroup")
+end, { noremap = true, silent = true, desc = "VSCode: Focus right editor group" })
