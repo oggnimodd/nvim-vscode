@@ -322,3 +322,45 @@ end, { noremap = true, silent = true, desc = "VSCode: Focus left editor group" }
 map("n", "<C-l>", function()
 	vscode.action("workbench.action.focusRightGroup")
 end, { noremap = true, silent = true, desc = "VSCode: Focus right editor group" })
+
+function CopyVSCodeDiagnostics()
+	-- This JavaScript snippet runs inside VS Code and has access to its full API.
+	local js_code = [[
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) { return null; }
+
+        const diagnostics = vscode.languages.getDiagnostics(editor.document.uri);
+        if (!diagnostics || diagnostics.length === 0) { return null; }
+
+        const severityMap = { 0: 'ERROR', 1: 'WARN', 2: 'INFO', 3: 'HINT' };
+        const lines = diagnostics.map(d => {
+            const line = d.range.start.line + 1;
+            const col = d.range.start.character + 1;
+            const sev = severityMap[d.severity] || 'UNKNOWN';
+            const src = d.source || '?';
+            const msg = d.message.replace(/[\n\r]+/g, ' ');
+            return `${line}:${col} [${sev}] (${src}) ${msg}`;
+        });
+
+        return lines;
+    ]]
+
+	-- vscode.eval runs the JavaScript and returns the result to Lua.
+	local result, err = vscode.eval(js_code)
+
+	if err then
+		vim.notify("Error getting diagnostics: " .. vim.inspect(err), vim.log.levels.ERROR)
+		return
+	end
+
+	if not result or #result == 0 then
+		vim.notify("No diagnostics found in the current file.", vim.log.levels.INFO)
+		return
+	end
+
+	local content = table.concat(result, "\n")
+	vim.fn.setreg("+", content)
+	vim.notify("Copied " .. #result .. " diagnostics to clipboard.")
+end
+
+require("custom.copy-file-content")
