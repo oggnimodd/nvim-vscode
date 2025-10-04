@@ -364,3 +364,10 @@ function CopyVSCodeDiagnostics()
 end
 
 require 'custom.copy-file-content'
+require 'custom.paste-file-content'
+
+vim.keymap.set('n', '<S-a>', '<Cmd>PasteFileContent<CR>', {
+  noremap = true,
+  silent = true,
+  desc = 'Replace entire file with clipboard content',
+})
