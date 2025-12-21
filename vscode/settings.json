@@ -1,0 +1,126 @@
+{
+	"editor.fontSize": 16,
+	"files.exclude": {
+		"**/.git": true,
+		"**/.DS_Store": true,
+		"**/node_modules": true,
+		"**/venv": true,
+		"**/__pycache__": true,
+		"**/.vercel": true,
+		"**/.svelte-kit": true,
+		"**/build": true,
+		"**/dist": true,
+		"**/.aider.tags.cache.v3": true
+	},
+	"editor.formatOnSaveMode": "file",
+	"editor.wordWrap": "on",
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"git.confirmSync": false,
+	"svelte.enable-ts-plugin": true,
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+	"workbench.editor.enablePreview": false,
+	"roo-cline.allowedCommands": [
+		"git log",
+		"git diff",
+		"git show",
+		"ac",
+		"bun run build",
+		"firefox ./dist/index.html",
+		"npm test",
+		"npm install",
+		"tsc",
+		"mkdir",
+		"find",
+		"flutter pub get",
+		"bun add -D -E @biomejs/biome",
+		"bun add --dev husky lint-staged",
+		"bunx husky init",
+		"cd ./razor/bash",
+		"cd /home/orenji/coding/wp/wp-hotel-booking",
+		"mkdir -p commands/razor-csrf",
+		"docker",
+		"docker exec",
+		"docker exec wordpress-wordpress-1",
+		"grep",
+		"rg",
+		"curl",
+		"-X",
+		"-X POST",
+		"-d",
+		"-d action=megamneu_wp_load_posts&post_type=post&s=test",
+		"--connect-timeout 10",
+		"-X POST \"http://wordpress-local.test/wp-admin/admin-ajax.php\"",
+		"-d action=mega_menu_load_item_data&menu_id=1",
+		"--connect-timeout",
+		"curl -b ./razor/bash/cookies/admin_cookies.txt",
+		"-d \"action=mega_menu_load_item_data&menu_id=1\""
+	],
+	"kotlin.languageServer.enabled": false,
+	"kotlin.debugAdapter.enabled": false,
+	"github.copilot.enable": {
+		"*": true,
+		"plaintext": false,
+		"markdown": false,
+		"scminput": false
+	},
+	"supermaven.allowGitignore": false,
+	"extensions.ignoreRecommendations": true,
+	"explorer.confirmDelete": false,
+	"editor.insertSpaces": true,
+	"editor.tabSize": 2,
+	"chat.commandCenter.enabled": false,
+	"[html]": {
+		"editor.defaultFormatter": "vscode.html-language-features"
+	},
+	"editor.minimap.enabled": false,
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"supermaven.enable": {
+		"markdown": true,
+		"*": true
+	},
+	"roo-cline.deniedCommands": ["find lib -type d"],
+	"[dart]": {
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+		"editor.rulers": [80],
+		"editor.selectionHighlight": false,
+		"editor.tabCompletion": "onlySnippets",
+		"editor.wordBasedSuggestions": "off"
+	},
+	"extensions.experimental.affinity": {
+		"asvetliakov.vscode-neovim": 1
+	},
+	"vscode-neovim.compositeKeys": {
+		"jj": {
+			"command": "vscode-neovim.escape"
+		}
+	},
+	"vscode-neovim.NVIM_APPNAME": "nvim-vscode",
+	"editor.lineNumbers": "relative",
+	"typescript.experimental.useTsgo": true,
+	"window.titleBarStyle": "custom",
+	"window.customMenuBarAltFocus": false,
+	"biome.lsp.bin": "~/.bun/install/global/node_modules/@biomejs/cli-linux-x64/biome",
+	"editor.defaultFormatter": "biomejs.biome",
+	"editor.formatOnSave": true,
+	"workbench.colorTheme": "Default Dark Modern"
+}

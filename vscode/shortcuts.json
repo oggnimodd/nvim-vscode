@@ -1,0 +1,340 @@
+// Place your key bindings in this file to override the defaults
+[
+  // Remove default "Add Cursor" keybindings
+  {
+    "key": "alt+shift+up",
+    "command": "-editor.action.insertCursorAbove",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+shift+down",
+    "command": "-editor.action.insertCursorBelow",
+    "when": "editorTextFocus"
+  },
+  // Map Alt+Shift+Up/Down to duplicate lines
+  {
+    "key": "alt+shift+up",
+    "command": "editor.action.copyLinesUpAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+shift+down",
+    "command": "editor.action.copyLinesDownAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+shift+/",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Clean Code (decomment)",
+    "when": "editorTextFocus",
+    "title": "Clean Code (decomment)"
+  },
+  // neovim
+  {
+    "command": "vscode-neovim.send",
+    "key": "tab",
+    "when": "editorTextFocus && neovim.mode != 'insert'",
+    "args": "<Tab>"
+  },
+  {
+    "command": "vscode-neovim.send",
+    "key": "shift+tab",
+    "when": "editorTextFocus && neovim.mode != 'insert'",
+    "args": "<S-Tab>"
+  },
+  {
+    "key": "ctrl+s",
+    "when": "editorTextFocus && neovim.mode == 'insert'",
+    "command": "vscode-neovim.lua",
+    "args": [
+      "local vscode = require('vscode')",
+      "vscode.call('workbench.action.files.save', {}, -1)",
+      "vscode.action('vscode-neovim.escape')"
+    ]
+  },
+  // --- Insert Line Below (Ctrl+Enter or Ctrl+J) ---
+  // When in NORMAL mode, send 'o' to Neovim
+  {
+    "key": "ctrl+enter",
+    "command": "vscode-neovim.send",
+    "args": "o",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "vscode-neovim.send",
+    "args": "o",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  // When in INSERT or VISUAL mode, use the VS Code command
+  {
+    "key": "ctrl+enter",
+    "command": "editor.action.insertLineAfter",
+    "when": "editorTextFocus && (neovim.mode == 'insert' || neovim.mode == 'visual')"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "editor.action.insertLineAfter",
+    "when": "editorTextFocus && (neovim.mode == 'insert' || neovim.mode == 'visual')"
+  },
+  // --- Insert Line Above (Ctrl+K) ---
+  // When in NORMAL mode, send 'O' to Neovim
+  {
+    "key": "ctrl+k",
+    "command": "vscode-neovim.send",
+    "args": "O",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  // When in INSERT or VISUAL mode, use the VS Code command
+  {
+    "key": "ctrl+k",
+    "command": "editor.action.insertLineBefore",
+    "when": "editorTextFocus && (neovim.mode == 'insert' || neovim.mode == 'visual')"
+  },
+  // Undo & Redo
+  {
+    "key": "ctrl+z",
+    "command": "undo",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+y",
+    "command": "redo",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+z",
+    "command": "redo",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+a",
+    "command": "editor.action.selectAll",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+h",
+    "command": "vscode-neovim.send",
+    "args": "<A-h>",
+    "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')"
+  },
+  {
+    "key": "alt+l",
+    "command": "vscode-neovim.send",
+    "args": "<A-l>",
+    "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')"
+  },
+  // When in INSERT mode, use the native VS Code commands for smooth movement
+  {
+    "key": "alt+h",
+    "command": "cursorLineStart",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "alt+l",
+    "command": "cursorEnd",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  // --- Clipboard: Ctrl+C ---
+  // When in INSERT mode, use the native VS Code copy command.
+  // This will NOT exit insert mode.
+  {
+    "key": "ctrl+c",
+    "command": "editor.action.clipboardCopyAction",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  // When in NORMAL or VISUAL mode, explicitly pass <C-c> to Neovim.
+  // This forces VS Code to let go of the key and lets our Lua mappings work.
+  {
+    "key": "ctrl+c",
+    "command": "vscode-neovim.send",
+    "args": "<C-c>",
+    "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')"
+  },
+  // Switch position
+  {
+    "key": "alt+j",
+    "command": "editor.action.moveLinesDownAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+k",
+    "command": "editor.action.moveLinesUpAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // Search
+  {
+    "key": "ctrl+f",
+    "command": "actions.find",
+    "when": "editorTextFocus && neovim.mode != 'cmdline'"
+  },
+  // --- Toggle Sidebar ---
+  // Override Neovim's default <C-b> (Page Up) and map it to
+  // toggling the sidebar visibility.
+  {
+    "key": "ctrl+b",
+    "command": "workbench.action.toggleSidebarVisibility",
+    "when": "editorTextFocus"
+  },
+  // --- Scroll View Without Moving Cursor ---
+  // Replicates Neovim's <C-e> and <C-y>
+  {
+    "key": "ctrl+down",
+    "command": "editorScroll",
+    "args": {
+      "to": "down",
+      "by": "line",
+      "revealCursor": false
+    },
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+up",
+    "command": "editorScroll",
+    "args": {
+      "to": "up",
+      "by": "line",
+      "revealCursor": false
+    },
+    "when": "editorTextFocus"
+  },
+  // --- Word Navigation ---
+  // Use VS Code's superior word/sub-word navigation
+  {
+    "key": "ctrl+right",
+    "command": "cursorWordPartRight",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+left",
+    "command": "cursorWordPartLeft",
+    "when": "editorTextFocus"
+  },
+  // Ctrl+backspace
+  {
+    "key": "ctrl+backspace",
+    "command": "deleteWordLeft",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "space k",
+    "command": "editor.action.showHover",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  // --- j/k for NORMAL mode (Uses fast VSCode command) ---
+  {
+    "key": "j",
+    "command": "cursorMove",
+    "args": {
+      "to": "down",
+      "by": "wrappedLine"
+    },
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "k",
+    "command": "cursorMove",
+    "args": {
+      "to": "up",
+      "by": "wrappedLine"
+    },
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  // --- j/k for VISUAL mode (Sends command to Neovim for correct selection) ---
+  {
+    "key": "j",
+    "command": "vscode-neovim.send",
+    "args": "gj",
+    "when": "editorTextFocus && neovim.mode == 'visual'"
+  },
+  {
+    "key": "k",
+    "command": "vscode-neovim.send",
+    "args": "gk",
+    "when": "editorTextFocus && neovim.mode == 'visual'"
+  },
+  // Closing tab
+  {
+    "key": "space q",
+    "command": "workbench.action.closeActiveEditor",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  // 1. Unbind the default "picker" UI for Ctrl+Tab
+  {
+    "key": "ctrl+tab",
+    "command": "-workbench.action.quickOpenNavigateNextInEditorPicker",
+    "when": "editorTextFocus"
+  },
+  // 2. Bind Ctrl+Tab to the command for IMMEDIATE next tab navigation
+  {
+    "key": "ctrl+tab",
+    "command": "workbench.action.nextEditor",
+    "when": "editorTextFocus"
+  },
+  // 3. Unbind the default "picker" UI for Ctrl+Shift+Tab
+  {
+    "key": "ctrl+shift+tab",
+    "command": "-workbench.action.quickOpenNavigatePreviousInEditorPicker",
+    "when": "editorTextFocus"
+  },
+  // 4. Bind Ctrl+Shift+Tab to the command for IMMEDIATE previous tab navigation
+  {
+    "key": "ctrl+shift+tab",
+    "command": "workbench.action.previousEditor",
+    "when": "editorTextFocus"
+  },
+  // 1. Unbind the default "picker" UI for Ctrl+Tab
+  {
+    "key": "ctrl+tab",
+    "command": "-workbench.action.quickOpenNavigateNextInEditorPicker",
+    "when": "editorTextFocus"
+  },
+  // 2. Bind Ctrl+Tab to the command for IMMEDIATE next tab navigation
+  {
+    "key": "ctrl+tab",
+    "command": "workbench.action.nextEditor",
+    "when": "editorTextFocus"
+  },
+  // 3. Unbind the default "picker" UI for Ctrl+Shift+Tab
+  {
+    "key": "ctrl+shift+tab",
+    "command": "-workbench.action.quickOpenNavigatePreviousInEditorPicker",
+    "when": "editorTextFocus"
+  },
+  // 4. Bind Ctrl+Shift+Tab to the command for IMMEDIATE previous tab navigation
+  {
+    "key": "ctrl+shift+tab",
+    "command": "workbench.action.previousEditor",
+    "when": "editorTextFocus"
+  },
+  // Comments removal
+  {
+    "key": "space d x",
+    "command": "vscode-neovim.send",
+    "args": "<Cmd>RemoveAllComments<CR>",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  // Moving between panes
+  {
+    "key": "ctrl+h",
+    "command": "-editor.action.startFindReplaceAction",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "-workbench.action.gotoLine",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "space d c",
+    "command": "vscode-neovim.lua",
+    "args": "CopyVSCodeDiagnostics()",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+shift+a",
+    "command": "vscode-neovim.send",
+    "args": "<Cmd>CopyFileContent<CR>",
+    "when": "editorTextFocus && neovim.mode != 'insert'"
+  }
+]
