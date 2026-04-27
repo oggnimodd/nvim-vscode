@@ -18,46 +18,11 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim with our plugins
 require('lazy').setup {
   {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
-    -- Use `main` and `opts` for a more robust setup with lazy.nvim
-    main = 'nvim-treesitter.configs',
-    opts = {
-      ensure_installed = {
-        'bash',
-        'c',
-        'diff',
-        'html',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'vim',
-        'vimdoc',
-        'typescript',
-        'javascript',
-        'css',
-        'json',
-        'tsx',
-        'svelte',
-        'rust',
-        'go',
-        'gomod',
-        'gowork',
-        'gosum',
-      },
-      auto_install = true,
-      highlight = {
-        enable = false, -- Let VS Code handle highlighting
-      },
-      indent = {
-        enable = false, -- Let VS Code handle indentation
-      },
-      textobjects = {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    branch = 'main',
+    config = function()
+      local textobjects = {
         select = {
-          enable = true,
           lookahead = true,
           keymaps = {
             ['a='] = { query = '@assignment.outer', desc = 'Select outer part of an assignment' },
@@ -72,20 +37,13 @@ require('lazy').setup {
             ['il'] = { query = '@loop.inner', desc = 'Select inner part of a loop' },
             ['af'] = { query = '@call.outer', desc = 'Select outer part of a function call' },
             ['if'] = { query = '@call.inner', desc = 'Select inner part of a function call' },
-            ['am'] = {
-              query = '@function.outer',
-              desc = 'Select outer part of a method/function definition',
-            },
-            ['im'] = {
-              query = '@function.inner',
-              desc = 'Select inner part of a method/function definition',
-            },
+            ['am'] = { query = '@function.outer', desc = 'Select outer part of a method/function definition' },
+            ['im'] = { query = '@function.inner', desc = 'Select inner part of a method/function definition' },
             ['ac'] = { query = '@class.outer', desc = 'Select outer part of a class' },
             ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class' },
           },
         },
         swap = {
-          enable = true,
           swap_next = {
             ['<leader>na'] = '@parameter.inner',
             ['<leader>n:'] = '@property.outer',
@@ -98,7 +56,6 @@ require('lazy').setup {
           },
         },
         move = {
-          enable = true,
           set_jumps = true,
           goto_next_start = {
             [']f'] = { query = '@call.outer', desc = 'Next function call start' },
@@ -129,24 +86,50 @@ require('lazy').setup {
             ['[L'] = { query = '@loop.outer', desc = 'Prev loop end' },
           },
         },
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = 'gnn',
-          node_incremental = 'gnp',
-          scope_incremental = 'gns',
-          node_decremental = 'gnm',
-        },
-      },
-    },
-    -- This config function will run AFTER the plugin has been setup with the `opts` table.
-    config = function(_, opts)
-      -- We need to call setup again here to apply the opts.
-      require('nvim-treesitter.configs').setup(opts)
+      }
 
-      -- Keymaps for repeatable textobject motions
-      local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
+      require('nvim-treesitter-textobjects').setup {
+        select = {
+          lookahead = textobjects.select.lookahead,
+        },
+        move = {
+          set_jumps = textobjects.move.set_jumps,
+        },
+      }
+
+      local ts_select = require 'nvim-treesitter-textobjects.select'
+      for lhs, mapping in pairs(textobjects.select.keymaps) do
+        vim.keymap.set({ 'x', 'o' }, lhs, function()
+          ts_select.select_textobject(mapping.query, mapping.query_group or 'textobjects')
+        end, { desc = mapping.desc })
+      end
+
+      local ts_swap = require 'nvim-treesitter-textobjects.swap'
+      for lhs, query in pairs(textobjects.swap.swap_next) do
+        vim.keymap.set('n', lhs, function()
+          ts_swap.swap_next(query)
+        end)
+      end
+      for lhs, query in pairs(textobjects.swap.swap_previous) do
+        vim.keymap.set('n', lhs, function()
+          ts_swap.swap_previous(query)
+        end)
+      end
+
+      local ts_move = require 'nvim-treesitter-textobjects.move'
+      local function map_move(maps, move_fn)
+        for lhs, mapping in pairs(maps) do
+          vim.keymap.set({ 'n', 'x', 'o' }, lhs, function()
+            move_fn(mapping.query, mapping.query_group or 'textobjects')
+          end, { desc = mapping.desc })
+        end
+      end
+      map_move(textobjects.move.goto_next_start, ts_move.goto_next_start)
+      map_move(textobjects.move.goto_next_end, ts_move.goto_next_end)
+      map_move(textobjects.move.goto_previous_start, ts_move.goto_previous_start)
+      map_move(textobjects.move.goto_previous_end, ts_move.goto_previous_end)
+
+      local ts_repeat_move = require 'nvim-treesitter-textobjects.repeatable_move'
       vim.keymap.set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
       vim.keymap.set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_opposite)
     end,
@@ -213,6 +196,7 @@ vim.opt.smartcase = true -- ...unless you type a capital letter
 
 vim.opt.hlsearch = true -- Highlight all search results
 vim.opt.incsearch = true -- Show search results as you type
+vim.opt.report = 999999 -- Keep routine edit counts out of the VS Code output panel
 
 -- -----------------------------------------------------------------
 -- What NOT to put here:

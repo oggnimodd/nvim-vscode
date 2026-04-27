@@ -20,8 +20,6 @@ local function copy_entire_file_content_vscode()
 
   if err or not success then
     vim.notify('VSCode: Failed to copy file content.', vim.log.levels.ERROR)
-  else
-    vim.notify 'VSCode: Copied entire file to clipboard.'
   end
 end
 
